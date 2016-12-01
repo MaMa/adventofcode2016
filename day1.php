@@ -23,7 +23,8 @@ How many blocks away is Easter Bunny HQ?
 $input = 'R4, R5, L5, L5, L3, R2, R1, R1, L5, R5, R2, L1, L3, L4, R3, L1, L1, R2, R3, R3, R1, L3, L5, R3, R1, L1, R1, R2, L1, L4, L5, R4, R2, L192, R5, L2, R53, R1, L5, R73, R5, L5, R186, L3, L2, R1, R3, L3, L3, R1, L4, L2, R3, L5, R4, R3, R1, L1, R5, R2, R1, R1, R1, R3, R2, L1, R5, R1, L5, R2, L2, L4, R3, L1, R4, L5, R4, R3, L5, L3, R4, R2, L5, L5, R2, R3, R5, R4, R2, R1, L1, L5, L2, L3, L4, L5, L4, L5, L1, R3, R4, R5, R3, L5, L4, L3, L1, L4, R2, R5, R5, R4, L2, L4, R3, R1, L2, R5, L5, R1, R1, L1, L5, L5, L2, L1, R5, R2, L4, L1, R4, R3, L3, R1, R5, L1, L4, R2, L3, R5, R3, R1, L3';
 
 $dir = 'N';
-$cnt = ['N' => 0, 'E' => 0, 'S' => 0, 'W' => 0];
+$x = 0;
+$y = 0;
 
 function readInstr($instr) {
     return [substr($instr, 0, 1), substr($instr, 1)];
@@ -38,15 +39,24 @@ function nextDir($cur, $turn) {
     }
 }
 
+function adjustCoord($dir, $dist) {
+    global $x, $y;
+    if ($dir == 'N') $y = $y + $dist;
+    elseif ($dir == 'S') $y = $y - $dist;
+    elseif ($dir == 'E') $x = $x + $dist;
+    elseif ($dir == 'W') $x = $x - $dist;
+    else die('invalid dir '. $dir);
+}
+
 //instructions
 $instrs = array_map('trim', explode(',', $input));
 foreach ($instrs as $instr) {
     list($turn, $steps) = readInstr($instr);
     $dir = nextDir($dir, $turn);
-    $cnt[$dir] += $steps;
+    adjustCoord($dir, $steps);
 }
 
-$answer1 = abs($cnt['N'] - $cnt['S']) + abs($cnt['E'] - $cnt['W']);
+$answer1 = abs($x) + abs($y);
 
 var_dump($answer1);
 
