@@ -39,7 +39,7 @@ $input = 'ULL
 RRDDD
 LURDL
 UUUUD';
-*/
+// */
 
 function idx($dir) {
     switch ($dir) {
@@ -67,11 +67,41 @@ function nextNum($num, $dir) {
     return $dirs[$num][idx($dir)];
 }
 
+function nextNum2($num, $dir) {
+    // L R U D
+    $dirs = [
+        1 => [1, 1, 1, 3],
+        2 => [2, 3, 2, 6],
+        3 => [2, 4, 1, 7],
+        4 => [3, 4, 4, 8],
+        5 => [5, 6, 5, 5],
+        6 => [5, 7, 2, 'A'],
+        7 => [6, 8, 3, 'B'],
+        8 => [7, 9, 4, 'C'],
+        9 => [8, 9, 9, 9],
+        'A' => ['A', 'B', 6, 'A'],
+        'B' => ['A', 'C', 7, 'D'],
+        'C' => ['B', 'C', 8, 'C'],
+        'D' => ['D', 'D', 'B', 'D']
+    ];
+    return $dirs[$num][idx($dir)];
+}
+
+
 $num = 5;
 $rows = array_map('trim', explode("\n", $input));
+print('Answer1: ');
 foreach($rows as $row) {
     foreach(str_split($row) as $dir) {
         $num = nextNum($num, $dir);
     }
     print($num);
 }
+print("\nAnswer2: ");
+foreach($rows as $row) {
+    foreach(str_split($row) as $dir) {
+        $num = nextNum2($num, $dir);
+    }
+    print($num);
+}
+print("\n");
