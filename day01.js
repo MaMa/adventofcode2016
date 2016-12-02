@@ -59,10 +59,10 @@ function finder(cur, move) {
     while (count--) {
         x += dir[0]
         y += dir[1]
-        const coord = [x,y].join()
+        const coord = [x, y].join()
         if (hist.indexOf(coord) !== -1) { //found
             return {
-                pos: {x, y, d:dir},
+                pos: { x, y, d: dir },
                 hist,
                 found: true
             }
@@ -70,7 +70,7 @@ function finder(cur, move) {
         hist.push(coord)
     }
     return {
-        pos: {x, y, d:dir},
+        pos: { x, y, d: dir },
         hist,
         found: false
     }
