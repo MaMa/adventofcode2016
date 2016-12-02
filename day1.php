@@ -25,6 +25,7 @@ $input = 'R4, R5, L5, L5, L3, R2, R1, R1, L5, R5, R2, L1, L3, L4, R3, L1, L1, R2
 $dir = 'N';
 $x = 0;
 $y = 0;
+$visited = [];
 
 function readInstr($instr) {
     return [substr($instr, 0, 1), substr($instr, 1)];
@@ -39,12 +40,25 @@ function nextDir($cur, $turn) {
     }
 }
 
+function move($dx, $dy, $count) {
+    global $x, $y, $visited, $answer2;
+    while($count--) {
+        $x += $dx;
+        $y += $dy;
+        if (!$answer2 && $visited[$x][$y]) {
+            var_dump('location', [$x, $y]);
+            $answer2 = abs($x) + abs($y);
+        } else {
+            $visited[$x][$y] = true;
+        }
+    }
+}
+
 function adjustCoord($dir, $dist) {
-    global $x, $y;
-    if ($dir == 'N') $y = $y + $dist;
-    elseif ($dir == 'S') $y = $y - $dist;
-    elseif ($dir == 'E') $x = $x + $dist;
-    elseif ($dir == 'W') $x = $x - $dist;
+    if ($dir == 'N') move(0, 1, $dist);
+    elseif ($dir == 'S') move(0, -1, $dist);
+    elseif ($dir == 'E') move(1, 0, $dist);
+    elseif ($dir == 'W') move(-1, 0, $dist);
     else die('invalid dir '. $dir);
 }
 
@@ -58,6 +72,6 @@ foreach ($instrs as $instr) {
 
 $answer1 = abs($x) + abs($y);
 
-var_dump($answer1);
-
+var_dump('part1', $answer1);
+var_dump('part2', $answer2);
 
