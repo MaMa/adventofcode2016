@@ -36,9 +36,9 @@ const input = fs.readFileSync('./input03.txt', { encoding: 'UTF8' });
 const in1 = input.split("\n").map(s => s.trim().split(/\s+/)).map(x => x.map(n => Number(n)))
 
 function isPossible(nums) {
-  const max = Math.max(...nums)
-  const sum = nums.reduce((a, b) => { return a + b }, 0)
-  return (sum - max) > max
+    const max = Math.max(...nums)
+    const sum = nums.reduce((a, b) => { return a + b }, 0)
+    return (sum - max) > max
 }
 
 const ans1 = in1.filter(isPossible)
@@ -46,21 +46,18 @@ const ans1 = in1.filter(isPossible)
 console.log('Part1:', ans1.length);
 
 const in2 = in1.reduce((cur, acc) => {
-  let nums = cur.nums
-  let tri = cur.tri
-
-  tri.push(acc)
-  if (tri.length == 3) {
-    nums.push([tri[0][0], tri[1][0], tri[2][0]])
-    nums.push([tri[0][1], tri[1][1], tri[2][1]])
-    nums.push([tri[0][2], tri[1][2], tri[2][2]])
-    tri = []
-  }
-  return {nums, tri}
-}, {
-  nums : [],
-  tri : []
-})
+    let tri = cur.tri
+    tri.push(acc)
+    if (tri.length == 3) {
+        cur.nums.push(
+            [tri[0][0], tri[1][0], tri[2][0]],
+            [tri[0][1], tri[1][1], tri[2][1]],
+            [tri[0][2], tri[1][2], tri[2][2]]
+        )
+        tri = []
+    }
+    return { nums: cur.nums, tri }
+}, { nums: [], tri: [] })
 
 const answer2 = in2.nums.filter(isPossible).length
 console.log('Part2:', answer2)
