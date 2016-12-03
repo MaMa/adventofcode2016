@@ -46,7 +46,7 @@ function parseRow(start, rules, row) {
 }
 
 const part1 = rows.reduce((answer, row) => {
-  const start = answer[answer.length-1] || initial
+  const start = answer[answer.length - 1] || initial
   const ans = parseRow(start, rules1, row.split(''))
   return answer + ans
 }, [])
