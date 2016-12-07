@@ -63,27 +63,23 @@ const answer1 = rows.filter(isTls).length
 
 console.log('Part 1:', answer1)
 
-function getAbas(string) {
-  let abas = []
-  for (let i = 0; i < string.length - 2; i++) {
-    const p = string.substring(i, i + 3)
-    if (p[0] === p[2] && p[0] !== p[1]) abas.push(p)
-  }
-  return abas
-}
-
-function uniqueAbas(abas) {
-  return abas.reduce((res, aba))
-
-}
-
-function abaToBab(aba) {
-  const a = aba.substring(0, 1)
-  const b = aba.substring(1, 2)
-  return `${b}${a}${b}`
-}
-
 function isSsl(row) {
+
+  function getAbas(string) {
+    let abas = []
+    for (let i = 0; i < string.length - 2; i++) {
+      const p = string.substring(i, i + 3)
+      if (p[0] === p[2] && p[0] !== p[1]) abas.push(p)
+    }
+    return abas
+  }
+
+  function abaToBab(aba) {
+    const a = aba.substring(0, 1)
+    const b = aba.substring(1, 2)
+    return `${b}${a}${b}`
+  }
+
   const abas = extractSuper(row)
     .map(getAbas)
     .reduce((ret, abas) => ret.concat(abas), [])
@@ -98,5 +94,3 @@ function isSsl(row) {
 const answer2 = rows.filter(isSsl).length
 
 console.log('Part 2:', answer2)
-
-
