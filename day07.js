@@ -13,14 +13,32 @@ aaaa[qwer]tyui does not support TLS (aaaa is invalid; the interior characters mu
 ioxxoj[asdfgh]zxcvbn supports TLS (oxxo is outside square brackets, even though it's within a larger string).
 How many IPs in your puzzle input support TLS?
 
+--- Part Two ---
+
+You would also like to know which IPs support SSL (super-secret listening).
+
+An IP supports SSL if it has an Area-Broadcast Accessor, or ABA, anywhere in the supernet sequences (outside any square bracketed sections), and a corresponding Byte Allocation Block, or BAB, anywhere in the hypernet sequences. An ABA is any three-character sequence which consists of the same character twice with a different character between them, such as xyx or aba. A corresponding BAB is the same characters but in reversed positions: yxy and bab, respectively.
+
+For example:
+
+aba[bab]xyz supports SSL (aba outside square brackets with corresponding bab within square brackets).
+xyx[xyx]xyx does not support SSL (xyx, but no corresponding yxy).
+aaa[kek]eke supports SSL (eke in supernet with corresponding kek in hypernet; the aaa sequence is not related, because the interior character must be different).
+zazbz[bzb]cdb supports SSL (zaz has no corresponding aza, but zbz has a corresponding bzb, even though zaz and zbz overlap).
+How many IPs in your puzzle input support SSL?
+
 */
 
 /*
 const input = `abba[mnop]qrst
 abcd[bddb]xyyx
 aaaa[qwer]tyui
-ioxxoj[asdfgh]zxcvbn`
-*/
+ioxxoj[asdfgh]zxcvbn
+aba[bab]xyz
+xyx[xyx]xyx
+aaa[kek]eke
+zazbz[bzb]cdb`
+// */
 
 const input = require('fs').readFileSync('./input07.txt', { encoding: 'UTF8' })
 
@@ -29,15 +47,14 @@ const rows = input.split("\n")
 function extractHyper(row) { return row.match(/\[([a-z]+)\]/g).map(x => x.replace(/\[|\]/g, '')) }
 function extractSuper(row) { return row.match(/([a-z]+)\[|\]([a-z]+)/g).map(x => x.replace(/\[|\]/g, '')) }
 
-function hasAbba(string) {
-  for (let i = 0; i < string.length - 3; i++) {
-    const p = string.substring(i, i + 4)
-    if (p[0] === p[3] && p[1] === p[2] && p[0] !== p[1]) return true
-  }
-  return false
-}
-
 function isTls(row) {
+  function hasAbba(string) {
+    for (let i = 0; i < string.length - 3; i++) {
+      const p = string.substring(i, i + 4)
+      if (p[0] === p[3] && p[1] === p[2] && p[0] !== p[1]) return true
+    }
+    return false
+  }
   if (extractHyper(row).filter(hasAbba).length) return false
   return !!extractSuper(row).filter(hasAbba).length
 }
@@ -46,7 +63,40 @@ const answer1 = rows.filter(isTls).length
 
 console.log('Part 1:', answer1)
 
+function getAbas(string) {
+  let abas = []
+  for (let i = 0; i < string.length - 2; i++) {
+    const p = string.substring(i, i + 3)
+    if (p[0] === p[2] && p[0] !== p[1]) abas.push(p)
+  }
+  return abas
+}
 
+function uniqueAbas(abas) {
+  return abas.reduce((res, aba))
 
+}
+
+function abaToBab(aba) {
+  const a = aba.substring(0, 1)
+  const b = aba.substring(1, 2)
+  return `${b}${a}${b}`
+}
+
+function isSsl(row) {
+  const abas = extractSuper(row)
+    .map(getAbas)
+    .reduce((ret, abas) => ret.concat(abas), [])
+  if (!abas.length) return false
+  return !!extractHyper(row).filter(hyper =>
+    !!abas.filter(aba =>
+      hyper.includes(abaToBab(aba))
+    ).length
+  ).length
+}
+
+const answer2 = rows.filter(isSsl).length
+
+console.log('Part 2:', answer2)
 
 
