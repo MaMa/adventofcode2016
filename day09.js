@@ -50,3 +50,33 @@ function parse(input) {
 const out1 = parse(input)
 //console.log(out1)
 console.log('Part1:', out1.length)
+
+
+function parseV2Len(input) {
+  let idx = 0
+  let chars = input.split('')
+  let out = 0
+  while (idx < input.length) {
+    const c = chars[idx]
+    if (c === '(') {
+      const match = input.substr(idx, 9).match(/^\((\d+)x(\d+)\)/)
+      if (match) {
+        idx += match[0].length
+        let times = Number(match[2])
+        const repeat = input.substr(idx, match[1])
+        out += parseV2Len(repeat)*times
+        idx += repeat.length
+      }
+      else {
+        idx++
+        out++
+      }
+    } else {
+      idx++
+      out++
+    }
+  }
+  return out
+}
+
+console.log('Part2: ', parseV2Len(input))
