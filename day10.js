@@ -24,6 +24,10 @@ Finally, bot 0 has two microchips; it puts the 3 in output 2 and the 5 in output
 In the end, output bin 0 contains a value-5 microchip, output bin 1 contains a value-2 microchip, and output bin 2 contains a value-3 microchip. In this configuration, bot number 2 is responsible for comparing value-5 microchips with value-2 microchips.
 
 Based on your instructions, what is the number of the bot that is responsible for comparing value-61 microchips with value-17 microchips?
+
+--- Part Two ---
+
+What do you get if you multiply together the values of one chip in each of outputs 0, 1, and 2?
 */
 
 /*
@@ -84,3 +88,16 @@ while (!state.found) {
 }
 
 console.log('Part1:', state.found)
+
+function result2(state) {
+  if (!state.output['0'] || !state.output['0'].length) return false
+  if (!state.output['1'] || !state.output['1'].length) return false
+  if (!state.output['2'] || !state.output['2'].length) return false
+  return (state.output['0'][0] * state.output['1'][0] * state.output['2'][0])
+}
+
+while (!result2(state)) {
+  state = instructions.reduce(iterate, state)
+}
+
+console.log('Part2:', result2(state))
