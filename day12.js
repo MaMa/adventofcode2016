@@ -28,6 +28,13 @@ dec a
 The above code would set register a to 41, increase its value by 2, decrease its value by 1, and then skip the last dec a (because a is not zero, so the jnz a 2 skips it), leaving register a at 42. When you move past the last instruction, the program halts.
 
 After executing the assembunny code in your puzzle input, what value is left in register a?
+
+--- Part Two ---
+
+As you head down the fire escape to the monorail, you notice it didn't start; register c needs to be initialized to the position of the ignition key.
+
+If you instead initialize register c to be 1, what value is now left in register a?
+
  */
 
 /*
@@ -99,5 +106,11 @@ function execute(instuction, ptr, reg) {
 while (instruction = instructions[ptr]) {
   ({ ptr, reg } = execute(instruction, ptr, reg))
 }
+console.log('Part1', {reg})
 
-console.log({ptr, reg})
+ptr = 0;
+reg = { a: 0, b: 0, c: 1, d: 0 }
+while (instruction = instructions[ptr]) {
+  ({ ptr, reg } = execute(instruction, ptr, reg))
+}
+console.log('Part2', {reg})
