@@ -56,40 +56,61 @@ function getNeighbors(x, y) {
 }
 
 let shortest = 100
+let coordSet = new Set([])
 
-function walk(coords, visited) {
-  if (visited.length > 100) return false
+function walk(coords, visited, limit) {
+  if (visited.length > limit) {
+    visited.forEach(coord => coordSet.add(coord))
+    return false
+  }
   if (coords.toString() == TARGET.toString()) {
     const len = visited.length
     if (shortest > len) shortest = len
     return visited.length
   }
   const neighbors = getNeighbors(...coords).filter(neighbor => visited.indexOf(neighbor.toString()) === -1)
-  if (!neighbors.length) return false
+  if (!neighbors.length) {
+    coordSet.add(coords.toString())
+    visited.forEach(coord => coordSet.add(coord))
+    return false
+  }
   return Promise.all(neighbors.map(neighbor => {
-    walk(neighbor, visited.concat(coords.toString()))
+    walk(neighbor, visited.concat(coords.toString()), limit)
   }))
 }
 
-walk([1,1], []).then(() => console.log(shortest))
+//Part 1
+walk([1, 1], [], 100)
+  .then(() => console.log('Part 1:', shortest))
 
-/*
-// IRRELEVANT
+//Part 2
+coordSet = new Set([])
+walk([1, 1], [], 50)
+  .then(() => console.log('Part 2:', coordSet.size))
+//.then(() => printMap(fillMap(makeMap(25, 25), coordSet)))
 
+// Debugging functions
 function makeMap(xMax, yMax) {
   let map = []
   for (let y = 0; y < yMax; y++) {
     map[y] = []
     for (let x = 0; x < xMax; x++) {
-      map[y][x] = isWall(x, y)
+      map[y][x] = isWall(x, y) ? '#' : '.'
     }
   }
   return map
 }
 
+function fillMap(map, set) {
+  set.forEach(coord => {
+    const c = coord.split(',')
+    map[c[1]][c[0]] = '*'
+  })
+  return map
+}
+
 function printMap(map) {
   for (let y = 0; y < map.length; y++) {
-    console.log(map[y].map(x => x ? '#' : '.').join(''))
+    console.log(map[y].join(''))
   }
 }
-*/
