@@ -25,13 +25,24 @@ Your puzzle input is jlmsuwbz
 */
 const crypto = require('crypto')
 
+//const SALT = 'abc'
 const SALT = 'jlmsuwbz'
 
 let cache = []
 
+let PART2 = false
+
+function generateHash(string) {
+  const iterations = PART2 ? 2017 : 1
+  for (let i = 0; i < iterations; i++) {
+    string = crypto.createHash('md5').update(string).digest('hex')
+  }
+  return string
+}
+
 function getHash(idx) {
   if (!cache[idx]) {
-    cache[idx] = crypto.createHash('md5').update(`${SALT}${idx}`).digest('hex')
+    cache[idx] = generateHash(`${SALT}${idx}`)
   }
   return cache[idx]
 }
@@ -59,14 +70,35 @@ function isKey(idx) {
   return false
 }
 
-let idx = 0
-let keyCount = 0
-while (keyCount < 64) {
-  if(isKey(++idx)) {
-    keyCount++
-    console.log({idx})
+function part1() {
+  PART2 = false
+  cache = []
+  let idx = 0
+  let keyCount = 0
+  while (keyCount < 64) {
+    if (isKey(++idx)) {
+      keyCount++
+      //console.log({ idx })
+    }
   }
+  return idx
 }
 
-console.log('Part 1:', idx)
+function part2() {
+  PART2 = true
+  cache = []
+  let idx = 0
+  let keyCount = 0
+  while (keyCount < 64) {
+    if (isKey(++idx)) {
+      keyCount++
+      //console.log({ idx })
+    }
+  }
+  return idx
+}
+
+console.log('Part 1:', part1())
+
+console.log('Part 2:', part2())
 
