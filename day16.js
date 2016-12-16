@@ -77,7 +77,7 @@ function checksum(input) {
   else return checksum(out)
 }
 
-function part1(string, length) {
+function getChecksum(string, length) {
   while (string.length < length) {
     string = dragon(string)
   }
@@ -85,4 +85,11 @@ function part1(string, length) {
 }
 
 //console.log('Test 1:', part1('10000', 20))
-console.log('Part 1:', part1('00101000101111010', 272))
+console.log('Part 1:', getChecksum('00101000101111010', 272))
+
+/*
+--- Part Two ---
+
+The second disk you have to fill has length 35651584. Again using the initial state in your puzzle input, what is the correct checksum for this disk?
+*/
+console.log('Part 2:', getChecksum('00101000101111010', 35651584))
