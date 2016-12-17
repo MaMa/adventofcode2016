@@ -34,6 +34,17 @@ With ulqzkmiv, the shortest would be DRURDRUDDLLDLUURRDULRLDUUDDDRR.
 Given your vault's passcode, what is the shortest path (the actual path, not just the length) to reach the vault?
 
 Your puzzle input is pgflpeqp.
+
+--- Part Two ---
+
+You're curious how robust this security solution really is, and so you decide to find longer and longer paths which still provide access to the vault. You remember that paths always end the first time they reach the bottom-right room (that is, they can never pass through it, only end in it).
+
+For example:
+
+If your passcode were ihgpwlah, the longest path would take 370 steps.
+With kglvqrro, the longest path would be 492 steps long.
+With ulqzkmiv, the longest path would be 830 steps long.
+What is the length of the longest path that reaches the vault?
 */
 
 const crypto = require('crypto')
@@ -62,12 +73,17 @@ function getExits(coords, path) {
 }
 
 let shortest = false
+let longest = 0
 function travel(coords, path) {
-  if (shortest && path.length > shortest.length) return false
+  //if (shortest && path.length > shortest.length) return false
   if (coords[0] == 3 && coords[1] == 3) {
+    if (path.length > longest) {
+      longest = path.length
+    }
     if (!shortest || path.length < shortest.length) {
       shortest = path
     }
+    return
   }
   getExits(coords, path).map(row => travel(row.coords, row.path))
 }
@@ -75,3 +91,4 @@ function travel(coords, path) {
 travel([0, 0], '')
 
 console.log('Part 1:', shortest)
+console.log('Part 2:', longest)
