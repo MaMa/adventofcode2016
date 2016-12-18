@@ -81,10 +81,23 @@ for (let i = 1; i < 40; i++) {
   rows[i] = makeRow(rows[i - 1])
 }
 
-
-
 const part1 = rows.map(row =>
   row.split('').filter(x => x === SAFE).length
 ).reduce((sum, count) => sum + count, 0)
 
 console.log('Part 1:', part1)
+
+/*
+--- Part Two ---
+
+How many safe tiles are there in a total of 400000 rows?
+*/
+
+let row = input
+let safes = 0
+for (let i = 0; i < 400000; i++) {
+  safes += row.split('').filter(x => x === SAFE).length
+  row = makeRow(row)
+}
+
+console.log('Part 2:', safes)
