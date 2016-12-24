@@ -83,7 +83,6 @@ function tgl(inst) {
 }
 
 function execute(instuction, ptr, reg) {
-  //console.log({ptr, reg})
   ptr++
   let match = instruction.match(/cpy (-?\d+) (\w)/)
   if (match) {
@@ -124,10 +123,15 @@ function execute(instuction, ptr, reg) {
 
 let ptr = 0;
 let reg = { a: 7, b: 0, c: 0, d: 0 }
-
 while (instruction = instructions[ptr]) {
   ({ ptr, reg } = execute(instruction, ptr, reg))
 }
 console.log('Part 1:', reg['a'])
 
-
+instructions = input.split("\n")
+ptr = 0;
+reg = { a: 12, b: 0, c: 0, d: 0 }
+while (instruction = instructions[ptr]) {
+  ({ ptr, reg } = execute(instruction, ptr, reg))
+}
+console.log('Part 2:', reg['a'])
