@@ -31,3 +31,18 @@ do {
 } while (min !== max)
 
 console.log('Part 1:', max)
+
+const MAX = ranges.reduce((res, v) => { return v[1] > res ? v[1] : res } , 0)
+let free = 0;
+let idx = 0;
+do {
+  const blocked = ranges.find(r => r[0] <= idx && r[1] >= idx)
+  if (blocked) {
+    idx = blocked[1]+1
+  } else {
+    free++
+    idx++
+  }
+} while (idx < MAX)
+
+console.log('Part 2:', free)
